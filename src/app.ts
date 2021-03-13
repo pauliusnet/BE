@@ -10,9 +10,11 @@ app.use('/leaderboard', leaderboardRoutes);
 app.use('/userDetails', userRoutes);
 
 //Server start
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server is running on localhost: ${port}`);
-});
+if (process.env.NODE_ENV != 'test') {
+    const port = 3000;
+    app.listen(port, () => {
+        console.log(`Server is running on localhost: ${port}`);
+    });
+}
 
 export default app;
