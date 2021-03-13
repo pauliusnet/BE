@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node app.ts",
     "build": "tsc",
-    "run:prod": "node ./dist/app.js",
+    "build:prod": "node ./dist/app.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "test": "jest"
