@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node app.ts",
+    "start": "ts-node ./src/server.ts",
     "build": "tsc",
-    "build:prod": "node ./dist/app.js",
+    "start:build": "node ./dist/server.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "test": "jest"
