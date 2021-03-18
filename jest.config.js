@@ -17,8 +17,8 @@ module.exports = {
             displayName: 'integration-tests',
             testRegex: ['integration-test.ts'],
             runner: '<rootDir>/../jest-serial-runner.js',
-            // globalSetup: '<rootDir>/integration-tests/helpers/global-setup.ts',
-            // globalTeardown: '<rootDir>/integration-tests/helpers/global-teardown.ts',
+            globalSetup: '<rootDir>/test-support/integration-tests-global-setup.ts',
+            globalTeardown: '<rootDir>/test-support/integration-tests-global-teardown.ts',
         },
         {
             ...baseConfig,
