@@ -2,6 +2,7 @@ module.exports = {
     env: {
         browser: true,
         es2021: true,
+        node: true,
     },
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     parser: '@typescript-eslint/parser',
@@ -18,5 +19,6 @@ module.exports = {
             },
         ],
         semi: ['error', 'always'],
+        '@typescript-eslint/no-unused-vars': ['error'],
     },
 };

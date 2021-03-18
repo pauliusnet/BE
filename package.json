@@ -9,18 +9,23 @@
     "start:build": "node ./dist/server.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "test": "jest"
+    "test": "jest",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^26.0.20",
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "express": "^4.17.1",
     "jest": "^26.6.3",
-    "ts-jest": "^26.5.3"
+    "pg": "^8.5.1",
+    "reflect-metadata": "^0.1.13",
+    "ts-jest": "^26.5.3",
+    "typeorm": "^0.2.31"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
