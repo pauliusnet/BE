@@ -25,4 +25,15 @@ describe('Tricks API tests', () => {
             level: 1,
         });
     });
+
+    it('should get all tricks', async () => {
+        const trick = new Trick();
+        trick.name = 'name';
+        trick.level = 1;
+        trick.videoURL = 'videoUrl';
+        await trick.save();
+        await request
+            .get('/tricks')
+            .expect([{ name: trick.name, level: trick.level, videoURL: trick.videoURL, id: trick.id }]);
+    });
 });

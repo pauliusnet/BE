@@ -9,6 +9,10 @@ class TrickRepository {
         trick.videoURL = trickBody.videoURL;
         await trick.save();
     }
+
+    async getAllTricks(): Promise<Trick[]> {
+        return await Trick.find();
+    }
 }
 
 export default TrickRepository;
