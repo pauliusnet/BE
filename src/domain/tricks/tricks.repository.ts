@@ -1,8 +1,8 @@
 import Trick from '../../entities/trick-entity';
-import { TrickRequestBody } from './tricks.types';
+import { CreateTrickDto, TrickDto } from './tricks.types';
 
 class TrickRepository {
-    async createTrick(trickBody: TrickRequestBody): Promise<void> {
+    async createTrick(trickBody: CreateTrickDto): Promise<void> {
         const trick = new Trick();
         trick.level = trickBody.level;
         trick.name = trickBody.name;
@@ -10,7 +10,7 @@ class TrickRepository {
         await trick.save();
     }
 
-    async getAllTricks(): Promise<Trick[]> {
+    async getAllTricks(): Promise<TrickDto[]> {
         return await Trick.find();
     }
 }

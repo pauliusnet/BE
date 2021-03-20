@@ -1,5 +1,7 @@
 require('dotenv/config');
 
+const isProductionEnv = process.env.NODE_ENV === 'production';
+
 module.exports = {
     type: 'postgres',
     host: process.env.DATABASE_HOST,
@@ -7,8 +9,8 @@ module.exports = {
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: ['src/entities/**/*.ts'],
-    migrations: ['src/migrations/**/*.ts'],
+    entities: [isProductionEnv ? 'dist/src/entities/**/*.js' : 'src/entities/**/*.ts'],
+    migrations: [isProductionEnv ? 'dist/src/migrations/**/*.js' : 'src/migrations/**/*.ts'],
     cli: {
         migrationsDir: 'src/migrations',
     },

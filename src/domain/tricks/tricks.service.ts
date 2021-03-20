@@ -1,11 +1,14 @@
-import Trick from '../../entities/trick-entity';
 import TrickRepository from './tricks.repository';
-import { TrickRequestBody } from './tricks.types';
+import { CreateTrickDto, TrickDto } from './tricks.types';
 
-export const createTrick = async (trickBody: TrickRequestBody): Promise<void> => {
-    await new TrickRepository().createTrick(trickBody);
-};
+class TricksService {
+    async createTrick(trickBody: CreateTrickDto): Promise<void> {
+        await new TrickRepository().createTrick(trickBody);
+    }
 
-export const getAllTricks = async (): Promise<Trick[]> => {
-    return await new TrickRepository().getAllTricks();
-};
+    async getAllTricks(): Promise<TrickDto[]> {
+        return await new TrickRepository().getAllTricks();
+    }
+}
+
+export default TricksService;
