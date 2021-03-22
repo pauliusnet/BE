@@ -11,6 +11,7 @@ env:
 jobs:
     test:
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         services:
             postgres:
                 image: postgres:latest
@@ -37,6 +38,7 @@ jobs:
             CI: true
     lint:
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
@@ -46,6 +48,7 @@ jobs:
             - run: npm run lint
     build:
         runs-on: ubuntu-latest
+        timeout-minutes: 30
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
@@ -53,3 +56,20 @@ jobs:
                   node-version: '14.x'
             - run: npm ci
             - run: npm run build
+    deploy:
+        runs-on: ubuntu-latest
+        needs: [lint, test, build]
+        if: github.ref == 'refs/heads/master'
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@v1
+            - run: zip -r deploy.zip . -x '*.git*'
+            - uses: einaregilsson/beanstalk-deploy@v16
+              with:
+                  aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  application_name: wake-server-side-dev
+                  environment_name: Wakeserversidedev-env
+                  version_label: ${{ github.sha }}
+                  region: us-east-1
+                  deployment_package: deploy.zip
