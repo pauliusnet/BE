@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"nodemon\" \"nodemon --watch ./src/**/*.controller.ts -x tsoa spec-and-routes\"",
+    "start": "nodemon",
     "build": "tsoa spec-and-routes && tsc",
-    "start:prod": "NODE_ENV=production node ./dist/src/server.js",
+    "start:prod": "ENVIRONMENT=prod node ./dist/server.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "test": "jest",

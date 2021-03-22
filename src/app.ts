@@ -2,11 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import { ValidateError } from '@tsoa/runtime';
-import 'dotenv/config';
 import 'reflect-metadata';
 import leaderboardRoutes from './routes/leaderboard';
 import userRoutes from './routes/user';
-import { RegisterRoutes } from '../routes-build/routes';
+import { RegisterRoutes } from './routes-build/routes';
+import '../loadenv';
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use('/leaderboard', leaderboardRoutes);
 app.use('/userDetails', userRoutes);
 
 app.use('/docs', swaggerUi.serve, async (req, res) =>
-    res.send(swaggerUi.generateHTML(await import('../routes-build/swagger.json')))
+    res.send(swaggerUi.generateHTML(await import('./routes-build/swagger.json')))
 );
 
 RegisterRoutes(app);
