@@ -52,6 +52,30 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"UserAuthenticationResponseDto": {
+				"properties": {
+					"jwt": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"jwt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserAuthenticationRequestDto": {
+				"properties": {
+					"accessToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"accessToken"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -74,7 +98,13 @@
 						"description": "Created"
 					}
 				},
-				"security": [],
+				"security": [
+					{
+						"jwt": [
+							"admin"
+						]
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -106,6 +136,35 @@
 				},
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/users/login": {
+			"post": {
+				"operationId": "Authenticate",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserAuthenticationResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserAuthenticationRequestDto"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

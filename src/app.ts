@@ -1,21 +1,18 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import swaggerUi from 'swagger-ui-express';
-import { ValidateError } from '@tsoa/runtime';
-import 'reflect-metadata';
-import leaderboardRoutes from './routes/leaderboard';
-import userRoutes from './routes/user';
-import { RegisterRoutes } from './routes-build/routes';
 import '../loadenv';
+import 'reflect-metadata';
+
+import { RegisterRoutes } from './routes-build/routes';
+import { UnauthorizedError } from './domain/user/users.errors';
+import { ValidateError } from '@tsoa/runtime';
+import bodyParser from 'body-parser';
+import express from 'express';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
-
-app.use('/leaderboard', leaderboardRoutes);
-app.use('/userDetails', userRoutes);
 
 app.use('/docs', swaggerUi.serve, async (req, res) =>
     res.send(swaggerUi.generateHTML(await import('./routes-build/swagger.json')))
@@ -32,6 +29,10 @@ app.use((err, req, res, next) => {
             message: 'Validation Failed',
             details: err?.fields,
         });
+    }
+    if (err instanceof UnauthorizedError) {
+        console.warn(`Caught Unauthorized Error for ${req.path}:`, err.message);
+        return res.status(401).json({ message: 'Unauthorized' });
     }
     if (err instanceof Error) {
         console.error(`Caught Error for ${req.path}:`, err.message);

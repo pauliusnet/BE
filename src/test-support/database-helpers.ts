@@ -1,5 +1,6 @@
-import { Client } from 'pg';
 import { Connection, createConnection } from 'typeorm';
+
+import { Client } from 'pg';
 import ormConfig from '../../ormconfig';
 
 export const TEST_DATABASE_NAME = ormConfig.database + '_test';
@@ -24,7 +25,7 @@ async function clearDatabaseTables(connection: Connection): Promise<void> {
     await Promise.all(
         connection.entityMetadatas.map(async (entity) => {
             const repository = connection.getRepository(entity.name);
-            await repository.query(`TRUNCATE TABLE ${entity.tableName} CASCADE`);
+            await repository.query(`TRUNCATE TABLE "${entity.tableName}" RESTART IDENTITY CASCADE`);
         })
     );
 }

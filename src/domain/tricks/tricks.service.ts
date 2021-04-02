@@ -1,13 +1,16 @@
-import TrickRepository from './tricks.repository';
 import { CreateTrickDto, TrickDto } from './tricks.types';
 
+import TricksRepository from './tricks.repository';
+
 class TricksService {
+    tricksRepository = new TricksRepository();
+
     async createTrick(trickBody: CreateTrickDto): Promise<void> {
-        await new TrickRepository().createTrick(trickBody);
+        await this.tricksRepository.createTrick(trickBody);
     }
 
     async getAllTricks(): Promise<TrickDto[]> {
-        return await new TrickRepository().getAllTricks();
+        return await this.tricksRepository.getAllTricks();
     }
 }
 

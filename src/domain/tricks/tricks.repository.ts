@@ -1,7 +1,8 @@
-import Trick from '../../entities/trick-entity';
 import { CreateTrickDto, TrickDto } from './tricks.types';
 
-class TrickRepository {
+import Trick from '../../entities/trick-entity';
+
+class TricksRepository {
     async createTrick(trickBody: CreateTrickDto): Promise<void> {
         const trick = new Trick();
         trick.level = trickBody.level;
@@ -15,4 +16,4 @@ class TrickRepository {
     }
 }
 
-export default TrickRepository;
+export default TricksRepository;

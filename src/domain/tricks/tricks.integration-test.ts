@@ -1,6 +1,6 @@
-import { useTestDatabase } from '../../test-support/database-helpers';
 import Trick from '../../entities/trick-entity';
 import { TricksController } from './tricks.controller';
+import { useTestDatabase } from '../../test-support/database-helpers';
 
 describe('Tricks API tests', () => {
     useTestDatabase();
@@ -15,7 +15,7 @@ describe('Tricks API tests', () => {
         });
 
         expect(controller.getStatus()).toBe(201);
-        const createdTrick = (await Trick.find())[0];
+        const createdTrick = await Trick.findOne();
         expect(createdTrick).toMatchObject({
             videoURL: 'testUrl',
             name: 'testName',
