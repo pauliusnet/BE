@@ -60,7 +60,7 @@ export function RegisterRoutes(app: express.Router) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
         app.post('/tricks',
-            authenticateMiddleware([{"jwt":["admin"]}]),
+            authenticateMiddleware([{"JWT":[]}]),
             function (request: any, response: any, next: any) {
             const args = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CreateTrickDto"},

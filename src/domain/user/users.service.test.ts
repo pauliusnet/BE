@@ -3,6 +3,7 @@ import { InvalidFacebookAccessToken } from '../../external/facebook-client/faceb
 import JwtManager from '../../external/jwt-manager/jwt-manager';
 import { UnauthorizedError } from './users.errors';
 import { UserDoesNotExist } from './users.repository.errors';
+import { UserRole } from '../../entities/role-entity.types';
 import UsersRepository from './users.repository';
 import UsersService from './users.service';
 
@@ -16,6 +17,7 @@ describe('Users service', () => {
     const applicationUserDetails = {
         ...facebookUserDetails,
         id: 12,
+        role: UserRole.Customer,
     };
     const invalidFacebookToken = 'invalid_acess_token';
     const validFacebookToken = 'valid_acess_token';
@@ -70,7 +72,7 @@ describe('Users service', () => {
         });
 
         it('should create new user if he/she does not exist', async () => {
-            jest.spyOn(UsersRepository.prototype, 'getUser').mockRejectedValue(new UserDoesNotExist('error'));
+            jest.spyOn(UsersRepository.prototype, 'getUser').mockRejectedValueOnce(new UserDoesNotExist('error'));
             const addNewUserSpy = jest.spyOn(UsersRepository.prototype, 'createUser').mockResolvedValue();
 
             await service.handleUserAuthentication({ accessToken: validFacebookToken });

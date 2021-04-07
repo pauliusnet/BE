@@ -17,8 +17,9 @@ class UsersService {
             await this.facebookClient.validateAccessToken(userAuthenticationRequest.accessToken);
             const userInfo = await this.facebookClient.getUserDetails(userAuthenticationRequest.accessToken);
             await this.createOrUpdateUser(userInfo);
+            const { email, role } = await this.usersRepository.getUser(userInfo.email);
 
-            return this.jwtManager.generateJwt({ email: userInfo.email });
+            return this.jwtManager.generateJwt({ email, role });
         } catch (error) {
             if (error instanceof InvalidFacebookAccessToken) {
                 throw new UnauthorizedError('Invalid facebook access token');

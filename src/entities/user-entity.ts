@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import Role from './role-entity';
 
 @Entity()
 class User extends BaseEntity {
@@ -13,6 +15,9 @@ class User extends BaseEntity {
 
     @Column()
     pictureURL: string;
+
+    @ManyToOne(() => Role, (role) => role.users)
+    role: Role;
 }
 
 export default User;

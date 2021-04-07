@@ -1,3 +1,5 @@
+import { UserRole } from '../../entities/role-entity.types';
+
 export interface UserInfoDto {
     name: string;
     pictureURL: string;
@@ -9,6 +11,7 @@ export interface GetUserDto {
     pictureURL: string;
     email: string;
     name: string;
+    role: UserRole;
 }
 
 export interface UserAuthenticationRequestDto {

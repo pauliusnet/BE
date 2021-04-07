@@ -24,8 +24,10 @@ export function useTestDatabase(): void {
 async function clearDatabaseTables(connection: Connection): Promise<void> {
     await Promise.all(
         connection.entityMetadatas.map(async (entity) => {
-            const repository = connection.getRepository(entity.name);
-            await repository.query(`TRUNCATE TABLE "${entity.tableName}" RESTART IDENTITY CASCADE`);
+            if (entity.name !== 'Role') {
+                const repository = connection.getRepository(entity.name);
+                await repository.query(`TRUNCATE TABLE "${entity.tableName}" RESTART IDENTITY CASCADE`);
+            }
         })
     );
 }
