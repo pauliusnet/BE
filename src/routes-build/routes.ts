@@ -36,7 +36,7 @@ const models: TsoaRoute.Models = {
     "UserAuthenticationResponseDto": {
         "dataType": "refObject",
         "properties": {
-            "jwt": {"dataType":"string","required":true},
+            "accessToken": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -44,9 +44,14 @@ const models: TsoaRoute.Models = {
     "UserAuthenticationRequestDto": {
         "dataType": "refObject",
         "properties": {
-            "accessToken": {"dataType":"string","required":true},
+            "facebookAccessToken": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RefreshTokenResponseDto": {
+        "dataType": "refAlias",
+        "type": {"ref":"UserAuthenticationResponseDto","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -122,6 +127,28 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.authenticate.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, undefined, next);
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/users/refresh-token',
+            function (request: any, response: any, next: any) {
+            const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new UsersController();
+
+
+            const promise = controller.refreshToken.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

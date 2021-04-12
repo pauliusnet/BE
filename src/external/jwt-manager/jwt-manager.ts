@@ -2,13 +2,25 @@ import { InvalidJwt } from './jwt-manager.errors';
 import jwt from 'jsonwebtoken';
 
 class JwtManager {
-    generateJwt(payload: Record<string, unknown>): string {
-        return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 1800 });
+    generateAccessToken(payload: Record<string, unknown>): string {
+        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30min' });
     }
 
-    async decodeJwt(jwtToken: string): Promise<Record<string, unknown>> {
+    generateRefreshToken(payload: Record<string, unknown>): string {
+        return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' });
+    }
+
+    async decodeAccessToken(accessToken: string): Promise<Record<string, unknown>> {
+        return this.decodeToken(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    }
+
+    async decodeRefreshToken(refreshToken: string): Promise<Record<string, unknown>> {
+        return this.decodeToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    }
+
+    private decodeToken(token: string, secret: string): Promise<Record<string, unknown>> {
         return new Promise((resolve, reject) => {
-            jwt.verify(jwtToken, process.env.JWT_SECRET as string, (err, decoded) => {
+            jwt.verify(token, secret, (err, decoded) => {
                 if (err) {
                     reject(new InvalidJwt(err.message));
                 } else {
@@ -18,5 +30,4 @@ class JwtManager {
         });
     }
 }
-
 export default JwtManager;

@@ -1,6 +1,7 @@
 import Trick from '../../entities/trick-entity';
 import { TricksController } from './tricks.controller';
 import { useTestDatabase } from '../../test-support/database-helpers';
+import TrickBuilder from '../../test-data/trick-builder';
 
 describe('Tricks API tests', () => {
     useTestDatabase();
@@ -24,10 +25,7 @@ describe('Tricks API tests', () => {
     });
 
     it('should get all tricks', async () => {
-        const trick = new Trick();
-        trick.name = 'name';
-        trick.level = 1;
-        trick.videoURL = 'videoUrl';
+        const trick = new TrickBuilder().build();
         await trick.save();
 
         const actual = await new TricksController().getTricks();

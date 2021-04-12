@@ -5,14 +5,18 @@ import { RegisterRoutes } from './routes-build/routes';
 import { UnauthorizedError } from './domain/user/users.errors';
 import { ValidateError } from '@tsoa/runtime';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 
+app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
+app.use(cookieParser());
+if (process.env.ENVIRONMENT !== 'prod') app.use(express.static(__dirname + '/routes-build'));
 
 app.use('/docs', swaggerUi.serve, async (req, res) =>
     res.send(swaggerUi.generateHTML(await import('./routes-build/swagger.json')))

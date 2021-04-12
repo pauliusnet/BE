@@ -1,8 +1,7 @@
 import { SecurityMethod, UserRole } from './entities/role-entity.types';
-
-import { InvalidJwt } from './external/jwt-manager/jwt-manager.errors';
 import { UnauthorizedError } from './domain/user/users.errors';
 import { expressAuthentication } from './authentication-middleware';
+import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 
 describe('Authentication middleware', () => {
@@ -12,7 +11,7 @@ describe('Authentication middleware', () => {
         } as unknown) as Request);
 
     it('should resolve if there is no security method defined', async () => {
-        await expect(expressAuthentication(getMockedRequest(undefined), undefined)).resolves;
+        await expect(expressAuthentication(getMockedRequest(undefined), undefined)).resolves.not.toThrow();
     });
 
     it('should throw Unauthorized if there is no authentication header', async () => {
@@ -21,24 +20,26 @@ describe('Authentication middleware', () => {
         );
     });
 
-    it('should throw Unauthorized if there is no jwt token provided', async () => {
+    it('should throw Unauthorized if there is no access token provided', async () => {
         await expect(expressAuthentication(getMockedRequest('Bearer '), SecurityMethod.Jwt)).rejects.toThrow(
             UnauthorizedError
         );
     });
 
-    it('should throw InvalidJwt if jwt token is invalid', async () => {
+    it('should throw Unauthorized if access token is invalid', async () => {
         await expect(
             expressAuthentication(getMockedRequest('Bearer invalid_token'), SecurityMethod.Jwt)
-        ).rejects.toThrow(InvalidJwt);
+        ).rejects.toThrow(UnauthorizedError);
     });
 
-    it('should resolve if jwt token is valid', async () => {
+    it('should resolve if access token is valid', async () => {
         jest.spyOn(jwt, 'verify').mockImplementation((token: string, secret: string, cb: (error, decoded) => void) =>
-            cb(null, { email: 'sad.asda' })
+            cb(null, { email: 'sad.asda', role: UserRole.Admin })
         );
 
-        await expect(expressAuthentication(getMockedRequest('Bearer valid_token'), SecurityMethod.Jwt)).resolves;
+        await expect(
+            expressAuthentication(getMockedRequest('Bearer valid_token'), SecurityMethod.Jwt)
+        ).resolves.not.toThrow();
     });
 
     it('should throw Unauthorized if user role is not available in decoded object', async () => {
@@ -53,7 +54,7 @@ describe('Authentication middleware', () => {
 
     it('should throw Unauthorized if user role does not match any described access scopes', async () => {
         jest.spyOn(jwt, 'verify').mockImplementation((token: string, secret: string, cb: (error, decoded) => void) =>
-            cb(null, { email: 'sad.asda', userRole: UserRole.Customer })
+            cb(null, { email: 'sad.asda', role: UserRole.Customer })
         );
 
         await expect(
@@ -63,19 +64,21 @@ describe('Authentication middleware', () => {
 
     it('should resolve if user role does match a described access scope', async () => {
         jest.spyOn(jwt, 'verify').mockImplementation((token: string, secret: string, cb: (error, decoded) => void) =>
-            cb(null, { email: 'sad.asda', userRole: UserRole.Customer })
+            cb(null, { email: 'sad.asda', role: UserRole.Customer })
         );
 
         await expect(
             expressAuthentication(getMockedRequest('Bearer valid_token'), SecurityMethod.Jwt, [UserRole.Customer])
-        ).resolves;
+        ).resolves.not.toThrow();
     });
 
     it('should resolve if user role is admin', async () => {
         jest.spyOn(jwt, 'verify').mockImplementation((token: string, secret: string, cb: (error, decoded) => void) =>
-            cb(null, { email: 'sad.asda', userRole: UserRole.Admin })
+            cb(null, { email: 'sad.asda', role: UserRole.Admin })
         );
 
-        await expect(expressAuthentication(getMockedRequest('Bearer valid_token'), SecurityMethod.Jwt, [])).resolves;
+        await expect(
+            expressAuthentication(getMockedRequest('Bearer valid_token'), SecurityMethod.Jwt, [])
+        ).resolves.not.toThrow();
     });
 });

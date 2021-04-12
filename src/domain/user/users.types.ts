@@ -15,9 +15,11 @@ export interface GetUserDto {
 }
 
 export interface UserAuthenticationRequestDto {
-    accessToken: string;
+    facebookAccessToken: string;
 }
 
 export interface UserAuthenticationResponseDto {
-    jwt: string;
+    accessToken: string;
 }
+
+export type RefreshTokenResponseDto = UserAuthenticationResponseDto;
