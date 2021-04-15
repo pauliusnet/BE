@@ -1,4 +1,4 @@
-import { CreateTrickDto, TrickDto } from './tricks.types';
+import { CreateTrickDto, TrickDto, UpdateTrickDto } from './tricks.types';
 
 import Trick from '../../entities/trick-entity';
 
@@ -13,6 +13,20 @@ class TricksRepository {
 
     async getAllTricks(): Promise<TrickDto[]> {
         return await Trick.find();
+    }
+
+    async deleteTrickById(id: number): Promise<void> {
+        await Trick.delete(id);
+    }
+
+    async updateTrickById(id: number, updatedTrick: UpdateTrickDto): Promise<TrickDto> {
+        const trick = await Trick.findOneOrFail(id);
+        trick.name = updatedTrick.name;
+        trick.level = updatedTrick.level;
+        trick.videoURL = updatedTrick.videoURL;
+        await trick.save();
+
+        return trick;
     }
 }
 

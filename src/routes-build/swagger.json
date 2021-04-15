@@ -53,6 +53,9 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UpdateTrickDto": {
+				"$ref": "#/components/schemas/CreateTrickDto"
+			},
 			"UserAuthenticationResponseDto": {
 				"properties": {
 					"accessToken": {
@@ -137,6 +140,73 @@
 				},
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/tricks/{id}": {
+			"delete": {
+				"operationId": "DeleteTrickById",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateTrickById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TrickDto"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateTrickDto"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/users/login": {

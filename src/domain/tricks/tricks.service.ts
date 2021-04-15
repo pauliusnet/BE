@@ -1,4 +1,4 @@
-import { CreateTrickDto, TrickDto } from './tricks.types';
+import { CreateTrickDto, TrickDto, UpdateTrickDto } from './tricks.types';
 
 import TricksRepository from './tricks.repository';
 
@@ -11,6 +11,14 @@ class TricksService {
 
     async getAllTricks(): Promise<TrickDto[]> {
         return await this.tricksRepository.getAllTricks();
+    }
+
+    async deleteTrickById(id: number): Promise<void> {
+        return await this.tricksRepository.deleteTrickById(id);
+    }
+
+    async updateTrickById(id: number, updatedTrick: UpdateTrickDto): Promise<TrickDto> {
+        return await this.tricksRepository.updateTrickById(id, updatedTrick);
     }
 }
 

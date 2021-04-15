@@ -4,6 +4,8 @@ export interface CreateTrickDto {
     level: number;
 }
 
+export type UpdateTrickDto = CreateTrickDto;
+
 export interface TrickDto {
     id: number;
     name: string;
