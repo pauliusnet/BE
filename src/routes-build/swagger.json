@@ -82,6 +82,31 @@
 			},
 			"RefreshTokenResponseDto": {
 				"$ref": "#/components/schemas/UserAuthenticationResponseDto"
+			},
+			"UserRole": {
+				"enum": [
+					"ADMIN",
+					"CUSTOMER",
+					"REFEREE",
+					"INSTRUCTOR"
+				],
+				"type": "string"
+			},
+			"ChangeUserRoleRequestDto": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/UserRole"
+					}
+				},
+				"required": [
+					"email",
+					"role"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -255,6 +280,32 @@
 				},
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/users/change-role": {
+			"patch": {
+				"operationId": "ChangeRole",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ChangeUserRoleRequestDto"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

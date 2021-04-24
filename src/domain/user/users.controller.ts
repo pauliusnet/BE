@@ -1,7 +1,15 @@
 import { Request as ExpressRequest } from 'express';
-import { RefreshTokenResponseDto, UserAuthenticationRequestDto, UserAuthenticationResponseDto } from './users.types';
-import { Body, Controller, Post, Route, Request } from '@tsoa/runtime';
+import {
+    ChangeUserRoleRequestDto,
+    RefreshTokenResponseDto,
+    UserAuthenticationRequestDto,
+    UserAuthenticationResponseDto,
+} from './users.types';
+import { Body, Controller, Post, Route, Request, Patch, Security } from '@tsoa/runtime';
 import UsersService from './users.service';
+import { SecurityMethod } from '../../entities/role-entity.types';
+import { RoleDoesNotExist, UserDoesNotExist } from './users.repository.errors';
+import { BadRequest } from '../../common/common.errors';
 
 @Route('/users')
 export class UsersController extends Controller {
@@ -21,5 +29,21 @@ export class UsersController extends Controller {
     @Post('/refresh-token')
     async refreshToken(@Request() request: ExpressRequest): Promise<RefreshTokenResponseDto> {
         return { accessToken: await this.usersService.refreshAccessToken(request.cookies.refreshToken) };
+    }
+
+    @Patch('/change-role')
+    @Security(SecurityMethod.Jwt)
+    async changeRole(@Body() changeUserRoleRequest: ChangeUserRoleRequestDto): Promise<void> {
+        try {
+            await this.usersService.changeUserRole(changeUserRoleRequest);
+        } catch (error) {
+            if (error instanceof UserDoesNotExist) {
+                throw new BadRequest('User with provided email does not exist');
+            }
+            if (error instanceof RoleDoesNotExist) {
+                throw new BadRequest('Role with provided type does not exist');
+            }
+            throw error;
+        }
     }
 }

@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, Patch, Path, Post, Route, Security, Succ
 import { CreateTrickDto, TrickDto, UpdateTrickDto } from './tricks.types';
 import TricksService from './tricks.service';
 import { SecurityMethod } from '../../entities/role-entity.types';
+import { TrickDoesNotExist } from './tricks.repository.errors';
+import { BadRequest } from '../../common/common.errors';
 
 @Route('tricks')
 export class TricksController extends Controller {
@@ -23,12 +25,26 @@ export class TricksController extends Controller {
     @Delete('/{id}')
     @Security(SecurityMethod.Jwt)
     public async deleteTrickById(@Path() id: number): Promise<void> {
-        return await this.tricksService.deleteTrickById(id);
+        try {
+            await this.tricksService.deleteTrickById(id);
+        } catch (error) {
+            if (error instanceof TrickDoesNotExist) {
+                throw new BadRequest('Trick with provided id does not exist');
+            }
+            throw error;
+        }
     }
 
     @Patch('/{id}')
     @Security(SecurityMethod.Jwt)
     public async updateTrickById(@Path() id: number, @Body() requestBody: UpdateTrickDto): Promise<TrickDto> {
-        return await this.tricksService.updateTrickById(id, requestBody);
+        try {
+            return await this.tricksService.updateTrickById(id, requestBody);
+        } catch (error) {
+            if (error instanceof TrickDoesNotExist) {
+                throw new BadRequest('Trick with provided id does not exist');
+            }
+            throw error;
+        }
     }
 }

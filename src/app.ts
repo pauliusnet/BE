@@ -1,9 +1,9 @@
 import '../loadenv';
 import 'reflect-metadata';
-
 import { RegisterRoutes } from './routes-build/routes';
 import { UnauthorizedError } from './domain/user/users.errors';
 import { ValidateError } from '@tsoa/runtime';
+import { BadRequest } from './common/common.errors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -37,6 +37,10 @@ app.use((err, req, res, next) => {
     if (err instanceof UnauthorizedError) {
         console.warn(`Caught Unauthorized Error for ${req.path}:`, err.message);
         return res.status(401).json({ message: 'Unauthorized' });
+    }
+    if (err instanceof BadRequest) {
+        console.warn(`Caught BadRequest Error for ${req.path}:`, err.message);
+        return res.status(400).json({ message: 'Bad request' });
     }
     if (err instanceof Error) {
         console.error(`Caught Error for ${req.path}:`, err.message);

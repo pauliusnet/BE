@@ -23,3 +23,10 @@ export interface UserAuthenticationResponseDto {
 }
 
 export type RefreshTokenResponseDto = UserAuthenticationResponseDto;
+
+export interface ChangeUserRoleRequestDto {
+    email: string;
+    role: UserRole;
+}
+
+export type ChangeUserRoleDto = ChangeUserRoleRequestDto;

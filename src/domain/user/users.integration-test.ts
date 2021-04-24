@@ -7,6 +7,7 @@ import { UsersController } from './users.controller';
 import { useTestDatabase } from '../../test-support/database-helpers';
 import UserBuilder from '../../test-data/user-builder';
 import { Request } from 'express';
+import { BadRequest } from '../../common/common.errors';
 
 describe('Users API tests', () => {
     useTestDatabase();
@@ -73,6 +74,40 @@ describe('Users API tests', () => {
             const actual = await controller.refreshToken({ cookies: { refreshToken } } as Request);
 
             expect(actual).toEqual({ accessToken });
+        });
+    });
+
+    describe('PATCH /change-role', () => {
+        it('should update user role', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            await new UsersController().changeRole({ email: user.email, role: UserRole.Instructor });
+
+            expect((await User.findOneOrFail({ email: user.email }, { relations: ['role'] })).role.type).toEqual(
+                UserRole.Instructor
+            );
+        });
+
+        it('should throw bad request error if provided email does not exist', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            await expect(
+                new UsersController().changeRole({ email: 'incorrect_email', role: UserRole.Instructor })
+            ).rejects.toThrow(BadRequest);
+        });
+
+        it('should throw bad request error if provided role does not exist', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            await expect(
+                new UsersController().changeRole({ email: user.email, role: ('incorrect_role' as unknown) as UserRole })
+            ).rejects.toThrow(BadRequest);
         });
     });
 });
