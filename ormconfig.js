@@ -1,4 +1,4 @@
-require('dotenv');
+require('dotenv').config();
 
 const isProductionEnv = process.env.ENVIRONMENT === 'prod';
 const sslEnabled = process.env.DATABASE_SSL === 'true';

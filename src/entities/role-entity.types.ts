@@ -7,4 +7,5 @@ export enum UserRole {
 
 export enum SecurityMethod {
     Jwt = 'JWT',
+    StaticToken = 'STATIC_TOKEN',
 }

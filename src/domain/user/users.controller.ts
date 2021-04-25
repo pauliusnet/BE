@@ -46,4 +46,20 @@ export class UsersController extends Controller {
             throw error;
         }
     }
+
+    @Patch('/change-role-with-static-token')
+    @Security(SecurityMethod.StaticToken)
+    async changeRoleWithStaticToken(@Body() changeUserRoleRequest: ChangeUserRoleRequestDto): Promise<void> {
+        try {
+            await this.usersService.changeUserRole(changeUserRoleRequest);
+        } catch (error) {
+            if (error instanceof UserDoesNotExist) {
+                throw new BadRequest('User with provided email does not exist');
+            }
+            if (error instanceof RoleDoesNotExist) {
+                throw new BadRequest('Role with provided type does not exist');
+            }
+            throw error;
+        }
+    }
 }

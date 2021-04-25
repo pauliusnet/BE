@@ -307,6 +307,32 @@
 					}
 				}
 			}
+		},
+		"/users/change-role-with-static-token": {
+			"patch": {
+				"operationId": "ChangeRoleWithStaticToken",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"security": [
+					{
+						"STATIC_TOKEN": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ChangeUserRoleRequestDto"
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"servers": [

@@ -26,5 +26,8 @@ export async function expressAuthentication(
             }
             throw error;
         }
+    } else if (securityName === SecurityMethod.StaticToken) {
+        const authHeader = request.headers['authorization'];
+        if (authHeader !== process.env.STATIC_TOKEN) throw new UnauthorizedError('Invalid static token');
     }
 }

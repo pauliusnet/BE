@@ -110,4 +110,41 @@ describe('Users API tests', () => {
             ).rejects.toThrow(BadRequest);
         });
     });
+
+    describe('PATCH /change-role-with-static-token', () => {
+        it('should update user role', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            await new UsersController().changeRoleWithStaticToken({ email: user.email, role: UserRole.Instructor });
+
+            expect((await User.findOneOrFail({ email: user.email }, { relations: ['role'] })).role.type).toEqual(
+                UserRole.Instructor
+            );
+        });
+
+        it('should throw bad request error if provided email does not exist', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            await expect(
+                new UsersController().changeRoleWithStaticToken({ email: 'incorrect_email', role: UserRole.Instructor })
+            ).rejects.toThrow(BadRequest);
+        });
+
+        it('should throw bad request error if provided role does not exist', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            await expect(
+                new UsersController().changeRoleWithStaticToken({
+                    email: user.email,
+                    role: ('incorrect_role' as unknown) as UserRole,
+                })
+            ).rejects.toThrow(BadRequest);
+        });
+    });
 });

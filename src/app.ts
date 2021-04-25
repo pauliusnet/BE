@@ -1,4 +1,4 @@
-import 'dotenv';
+import dotenv from 'dotenv';
 import 'reflect-metadata';
 import { RegisterRoutes } from './routes-build/routes';
 import { UnauthorizedError } from './domain/user/users.errors';
@@ -9,6 +9,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
+
+dotenv.config();
 
 const app = express();
 
