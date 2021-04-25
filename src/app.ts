@@ -1,4 +1,4 @@
-import '../loadenv';
+import 'dotenv';
 import 'reflect-metadata';
 import { RegisterRoutes } from './routes-build/routes';
 import { UnauthorizedError } from './domain/user/users.errors';

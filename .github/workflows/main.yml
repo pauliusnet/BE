@@ -63,13 +63,8 @@ jobs:
         timeout-minutes: 30
         steps:
             - uses: actions/checkout@v1
-            - run: zip -r deploy.zip . -x '*.git*'
-            - uses: einaregilsson/beanstalk-deploy@v16
+            - uses: akhileshns/heroku-deploy@v3.12.12
               with:
-                  aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  application_name: wake-server-side-dev
-                  environment_name: Wakeserversidedev-env
-                  version_label: ${{ github.sha }}
-                  region: us-east-1
-                  deployment_package: deploy.zip
+                heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                heroku_app_name: "wake-wave-dev"
+                heroku_email: "paulius.net@gmail.com"
