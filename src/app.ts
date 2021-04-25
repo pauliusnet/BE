@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 if (process.env.ENVIRONMENT !== 'prod') app.use(express.static(__dirname + '/routes-build'));
 
-app.use('/docs', swaggerUi.serve, async (req, res) =>
+app.use('/docsss', swaggerUi.serve, async (req, res) =>
     res.send(swaggerUi.generateHTML(await import('./routes-build/swagger.json')))
 );
 
