@@ -2,7 +2,7 @@ import FacebookClient from '../../external/facebook-client/facebook-client';
 import { InvalidFacebookAccessToken } from '../../external/facebook-client/facebook-client.errors';
 import JwtManager from '../../external/jwt-manager/jwt-manager';
 import { UnauthorizedError } from './users.errors';
-import { ChangeUserRoleDto, UserAuthenticationRequestDto } from './users.types';
+import { ChangeUserRoleDto, GetUserDto, UserAuthenticationRequestDto } from './users.types';
 import { UserDoesNotExist } from './users.repository.errors';
 import { UserInfoDto } from './users.types';
 import UsersRepository from './users.repository';
@@ -65,6 +65,10 @@ class UsersService {
             }
             throw error;
         }
+    }
+
+    async getAllUsers(): Promise<GetUserDto[]> {
+        return await this.usersRepository.getAllUsers();
     }
 
     async changeUserRole(changeUserRoleDto: ChangeUserRoleDto): Promise<void> {

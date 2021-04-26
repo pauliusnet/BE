@@ -37,6 +37,11 @@ class UsersRepository {
         };
     }
 
+    async getAllUsers(): Promise<GetUserDto[]> {
+        const users = await User.find({ relations: ['role'] });
+        return users.map((user) => ({ ...user, role: user.role.type }));
+    }
+
     async changeUserRole(changeUserRoleDto: ChangeUserRoleDto): Promise<void> {
         const user = await this.findUserByEmail(changeUserRoleDto.email, ['role']);
         user.role = await this.findRoleByType(changeUserRoleDto.role);

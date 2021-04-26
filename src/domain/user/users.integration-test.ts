@@ -111,6 +111,20 @@ describe('Users API tests', () => {
         });
     });
 
+    describe('GET /users', () => {
+        it('should find all users', async () => {
+            const user = new UserBuilder().build();
+            user.role = await Role.findOneOrFail({ type: UserRole.Customer });
+            await user.save();
+
+            const actual = await new UsersController().getAllUsers();
+
+            expect(actual).toEqual([
+                { id: user.id, name: user.name, email: user.email, pictureURL: user.pictureURL, role: user.role.type },
+            ]);
+        });
+    });
+
     describe('PATCH /change-role-with-static-token', () => {
         it('should update user role', async () => {
             const user = new UserBuilder().build();

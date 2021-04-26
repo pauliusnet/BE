@@ -1,11 +1,12 @@
 import { Request as ExpressRequest } from 'express';
 import {
     ChangeUserRoleRequestDto,
+    GetUserDto,
     RefreshTokenResponseDto,
     UserAuthenticationRequestDto,
     UserAuthenticationResponseDto,
 } from './users.types';
-import { Body, Controller, Post, Route, Request, Patch, Security } from '@tsoa/runtime';
+import { Body, Controller, Post, Route, Request, Patch, Security, Get } from '@tsoa/runtime';
 import UsersService from './users.service';
 import { SecurityMethod } from '../../entities/role-entity.types';
 import { RoleDoesNotExist, UserDoesNotExist } from './users.repository.errors';
@@ -29,6 +30,12 @@ export class UsersController extends Controller {
     @Post('/refresh-token')
     async refreshToken(@Request() request: ExpressRequest): Promise<RefreshTokenResponseDto> {
         return { accessToken: await this.usersService.refreshAccessToken(request.cookies.refreshToken) };
+    }
+
+    @Get()
+    @Security(SecurityMethod.Jwt)
+    async getAllUsers(): Promise<GetUserDto[]> {
+        return await this.usersService.getAllUsers();
     }
 
     @Patch('/change-role')

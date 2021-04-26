@@ -92,6 +92,35 @@
 				],
 				"type": "string"
 			},
+			"GetUserDto": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"pictureURL": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/UserRole"
+					}
+				},
+				"required": [
+					"id",
+					"pictureURL",
+					"email",
+					"name",
+					"role"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ChangeUserRoleRequestDto": {
 				"properties": {
 					"email": {
@@ -279,6 +308,32 @@
 					}
 				},
 				"security": [],
+				"parameters": []
+			}
+		},
+		"/users": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/GetUserDto"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"JWT": []
+					}
+				],
 				"parameters": []
 			}
 		},
